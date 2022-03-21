@@ -48,15 +48,18 @@ describe("Login e registro de usuarios alurapic", () => {
     });
   });
 
-  it.only("fazer registro de novo usuario", () => {
-    cy.contains("a", "Register now").click();
-    cy.register(
-      "gabs@alura.com",
-      "Gabriel Zanghelini",
-      ("gabs" + Math.random() * 1000).replace(".", ""),
-      "123456789"
-    );
-    cy.contains("button", "Register").click();
-    cy.contains("h4", "Login").should("be.visible");
+  const usuarios = require("../../fixtures/usuarios.json");
+
+  usuarios.forEach((usuario) => {
+    it(`fazer registro de novo usuario ${usuario.userName}`, () => {
+      cy.contains("a", "Register now").click();
+      cy.register(
+        usuario.email,
+        usuario.fullName,
+        (usuario.userName + Math.random() * 1000).replace(".", ""),
+        usuario.password
+      );
+      cy.contains("h4", "Login").should("be.visible");
+    });
   });
 });
